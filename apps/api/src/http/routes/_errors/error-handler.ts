@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 
 import { BadRequestError } from "@/http/routes/_errors/bad-request-error";
 import { UnauthorizedError } from "@/http/routes/_errors/unauthorized-error";
+import { NotFoundError } from "./not-found-error";
 
 type FastifyErrorHandler = FastifyInstance["errorHandler"];
 
@@ -11,6 +12,12 @@ export const errorHandler: FastifyErrorHandler = (error, request, reply) => {
     return reply.status(400).send({
       message: "Validation error",
       errors: error.flatten().fieldErrors,
+    });
+  }
+
+  if (error instanceof NotFoundError) {
+    return reply.status(404).send({
+      message: error.message,
     });
   }
 

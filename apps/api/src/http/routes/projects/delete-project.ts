@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { getUserPermissions } from "@/utils/get-user-permissions";
 import { UnauthorizedError } from "../_errors/unauthorized-error";
 import { projectSchema } from "@saas/auth";
-import { BadRequestError } from "../_errors/bad-request-error";
+import { NotFoundError } from "../_errors/not-found-error";
 
 export function deleteProject(app: FastifyInstance) {
   app
@@ -42,7 +42,7 @@ export function deleteProject(app: FastifyInstance) {
         });
 
         if (!project) {
-          throw new BadRequestError("Project not found");
+          throw new NotFoundError("Project not found");
         }
 
         const authProject = projectSchema.parse(project);
