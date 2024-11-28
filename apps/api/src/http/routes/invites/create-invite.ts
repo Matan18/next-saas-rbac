@@ -17,7 +17,7 @@ export function createInvite(app: FastifyInstance) {
       {
         schema: {
           tags: ["invites"],
-          summary: "Create new project",
+          summary: "Create new invite",
           security: [{ bearerAuth: [] }],
           body: z.object({
             email: z.string().email(),
