@@ -37,6 +37,8 @@ import { getInvite } from "./routes/invites/get-invite";
 import { getInvites } from "./routes/invites/get-invites";
 import { acceptInvite } from "./routes/invites/accept-invite";
 import { rejectInvite } from "./routes/invites/reject-invite";
+import { getPendingInvites } from "./routes/invites/get-pending-invites";
+import { revokeInvite } from "./routes/invites/revoke-invite";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -102,6 +104,7 @@ app.register(getInvites);
 app.register(acceptInvite);
 app.register(rejectInvite);
 app.register(revokeInvite);
+app.register(getPendingInvites);
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log("Server started at http://localhost:3333");
