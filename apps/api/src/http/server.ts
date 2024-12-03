@@ -101,6 +101,7 @@ app.register(getInvite);
 app.register(getInvites);
 app.register(acceptInvite);
 app.register(rejectInvite);
+app.register(revokeInvite);
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log("Server started at http://localhost:3333");
