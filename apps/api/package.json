@@ -35,7 +35,7 @@
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
-  "pretteier": "@saas/prettier",
+  "prettier": "@saas/prettier",
   "eslintConfig": {
     "extends": [
       "@saas/eslint-config/node"
