@@ -96,6 +96,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      ky:
+        specifier: ^1.7.3
+        version: 1.7.3
       lucide-react:
         specifier: ^0.468.0
         version: 0.468.0(react@19.0.0-rc-cd22717c-20241013)
@@ -3108,6 +3111,11 @@ packages:
     dependencies:
       json-buffer: 3.0.1
     dev: true
+
+  /ky@1.7.3:
+    resolution: {integrity: sha512-Sz49ZWR/BjNOq+2UK1k9ONZUVq8eyuCj30Zgc8VrRNtFlTBZduzuvehUd5kjQF6/Fms3Ir3EYqzJryw9tRvsSw==}
+    engines: {node: '>=18'}
+    dev: false
 
   /language-subtag-registry@0.3.22:
     resolution: {integrity: sha512-tN0MCzyWnoz/4nHS6uxdlFWoUZT7ABptwKPQ52Ea7URk6vll88bWBVhodtnlfEuCcKWNGoc+uGbw1cwa9IKh/w==}
