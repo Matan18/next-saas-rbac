@@ -9,18 +9,16 @@ import githubIcon from '@/assets/github-icon.svg'
 import Image from 'next/image'
 import Link from 'next/link'
 import { signInWithEmailAndPassword } from './actions'
-import { useActionState } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { useFormState } from '@/hooks/use-form-state'
 
 export function SignInForm() {
-  const [state, formAction, isPending] = useActionState(
-    signInWithEmailAndPassword,
-    { success: false, message: null, errors: null }
+  const [{ success, message, errors }, handleSignIn, isPending] = useFormState(
+    signInWithEmailAndPassword
   )
-  const { success, message, errors } = state
 
   return (
-    <form action={formAction} className="space-y-4">
+    <form onSubmit={handleSignIn} className="space-y-4">
       {success === false && message && (
         <Alert variant="destructive">
           <AlertTriangle className="size-4" />
