@@ -136,6 +136,9 @@ importers:
       '@saas/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@saas/env':
+        specifier: workspace:*
+        version: link:../../packages/env
       '@saas/eslint-config':
         specifier: workspace:*
         version: link:../../config/eslint-config
@@ -154,6 +157,9 @@ importers:
       '@types/react-dom':
         specifier: ^18
         version: 18.3.1
+      dotenv-cli:
+        specifier: ^7.4.2
+        version: 7.4.2
       eslint-plugin-prettier:
         specifier: ^5.2.1
         version: 5.2.1(eslint-config-prettier@9.1.0(eslint@8.57.0))(eslint@8.57.0)(prettier@3.2.5)
