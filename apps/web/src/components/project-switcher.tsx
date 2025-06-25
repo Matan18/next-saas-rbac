@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { ChevronsUpDown, Plus } from 'lucide-react'
+import { ChevronsUpDown, Loader2, Plus } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 
@@ -17,39 +17,56 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
+import { Skeleton } from './ui/skeleton'
 
 export function ProjectSwithcer() {
-  const { slug: orgSlug } = useParams<{
+  const { slug: orgSlug, project: projectSlug } = useParams<{
     slug: string
+    project?: string
   }>()
 
-  const { data: projects, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['projects', orgSlug],
     queryFn: async () => getProjects(orgSlug),
     enabled: !!orgSlug,
   })
 
-  console.log({ projects })
+  const projects = data?.projects
+
+  const currentProject =
+    projects?.find((project) => project.slug === projectSlug) || null
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex w-[168px] items-center gap-2 rounded p-1 text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-primary">
-        {/* {currentOrganization ? (
+        {isLoading ? (
           <>
-            <Avatar className="mr-2 size-4">
-              {currentOrganization.avatarUrl && (
-                <AvatarImage src={currentOrganization.avatarUrl} />
-              )}
-              <AvatarFallback />
-            </Avatar>
-
-            <span className="truncate">{currentOrganization.name}</span>
+            <Skeleton className="size-4 rounded-full" />
+            <Skeleton className="h-4 flex-1" />
           </>
-        ) : ( */}
-        <span className="text-muted-foreground">Select Project</span>
-        {/* )}  */}
+        ) : (
+          <>
+            {currentProject ? (
+              <>
+                <Avatar className="mr-2 size-4">
+                  {currentProject.avatarUrl && (
+                    <AvatarImage src={currentProject.avatarUrl} />
+                  )}
+                  <AvatarFallback />
+                </Avatar>
 
-        <ChevronsUpDown className="ml-auto size-4 text-muted-foreground" />
+                <span className="truncate">{currentProject.name}</span>
+              </>
+            ) : (
+              <span className="text-muted-foreground">Select Project</span>
+            )}
+          </>
+        )}
+        {isLoading ? (
+          <Loader2 className="ml-auto size-4 shrink-0 animate-spin text-muted-foreground" />
+        ) : (
+          <ChevronsUpDown className="ml-auto size-4 shrink-0 text-muted-foreground" />
+        )}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
@@ -59,27 +76,25 @@ export function ProjectSwithcer() {
         sideOffset={12}
       >
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Organization</DropdownMenuLabel>
+          <DropdownMenuLabel>Projects</DropdownMenuLabel>
 
-          {/* {organizations.map((organization) => ( */}
-          <DropdownMenuItem asChild>
-            <Link href="" /* href={`/org/${organization.slug}`} */>
-              <Avatar className="mr-2 size-4">
-                {/* {organization.avatarUrl && (
-                    <AvatarImage src={organization.avatarUrl} />
-                  )} */}
-                <AvatarFallback />
-              </Avatar>
+          {projects?.map((project) => (
+            <DropdownMenuItem key={project.id} asChild>
+              <Link href={`/org/${orgSlug}/project/${project.slug}`}>
+                <Avatar className="mr-2 size-4">
+                  {project.avatarUrl && <AvatarImage src={project.avatarUrl} />}
+                  <AvatarFallback />
+                </Avatar>
 
-              <span className="truncate">Projeto Teste</span>
-            </Link>
-          </DropdownMenuItem>
-          {/* ))} */}
+                <span className="truncate">{project.name}</span>
+              </Link>
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
-          <Link href="">
+          <Link href={`/org/${orgSlug}/project/create-project`}>
             <Plus className="mr-2 size-4" />
             Create new
           </Link>
