@@ -1,4 +1,4 @@
-import { useState, useTransition, type FormEvent } from 'react'
+import { type FormEvent, useState, useTransition } from 'react'
 
 interface FormState {
   success: boolean
@@ -8,11 +8,12 @@ interface FormState {
 
 export function useFormState(
   action: (data: FormData) => Promise<FormState>,
+  onSuccess?: () => Promise<void> | void,
   initialState: FormState = {
     success: false,
     message: null,
     errors: null,
-  }
+  },
 ) {
   const [isPending, startTransition] = useTransition()
   const [state, setFormState] = useState(initialState)
@@ -24,8 +25,13 @@ export function useFormState(
     const data = new FormData(form)
 
     startTransition(async () => {
-      const result = await action(data)
-      setFormState(result)
+      const state = await action(data)
+
+      if (state.success && onSuccess) {
+        await onSuccess()
+      }
+
+      setFormState(state)
     })
   }
 

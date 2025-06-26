@@ -94,7 +94,7 @@ export function ProjectSwithcer() {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
-          <Link href={`/org/${orgSlug}/project/create-project`}>
+          <Link href={`/org/${orgSlug}/create-project`}>
             <Plus className="mr-2 size-4" />
             Create new
           </Link>
