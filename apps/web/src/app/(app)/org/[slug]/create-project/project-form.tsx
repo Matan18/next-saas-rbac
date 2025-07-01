@@ -15,7 +15,6 @@ import { createProjectAction } from './actions'
 
 export function ProjectForm() {
   const { slug: org } = useParams<{ slug: string }>()
-  console.log({ org })
 
   const [{ errors, message, success }, handleSubmit, isPending] = useFormState(
     createProjectAction,
