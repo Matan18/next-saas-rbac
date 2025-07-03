@@ -1,10 +1,12 @@
+import type { Role } from '@saas/auth'
+
 import { api } from './api-client'
 
 interface GetInvitesResponse {
   invites: {
     id: string
     createdAt: string
-    role: 'ADMIN' | 'MEMBER' | 'BILLING'
+    role: Role
     email: string
     author: {
       name: string | null
