@@ -1,21 +1,25 @@
 'use client'
+import { AlertTriangle, Loader2 } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+
+import githubIcon from '@/assets/github-icon.svg'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import { AlertTriangle, Loader2 } from 'lucide-react'
-import githubIcon from '@/assets/github-icon.svg'
-
-import Image from 'next/image'
-import Link from 'next/link'
-import { signInWithEmailAndPassword } from './actions'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { useFormState } from '@/hooks/use-form-state'
+
 import { signInWithGithub } from '../actions'
+import { signInWithEmailAndPassword } from './actions'
 
 export function SignInForm() {
+  const searchParams = useSearchParams()
+
   const [{ success, message, errors }, handleSignIn, isPending] = useFormState(
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
   )
 
   return (
@@ -32,7 +36,12 @@ export function SignInForm() {
         )}
         <div className="space-y-1">
           <Label htmlFor="email">E-mail</Label>
-          <Input name="email" type="email" id="email" />
+          <Input
+            name="email"
+            type="email"
+            id="email"
+            defaultValue={searchParams.get('email') || ''}
+          />
           {errors?.email && (
             <p className="text-sm font-medium text-red-500 dark:text-red-400">
               {errors.email[0]}

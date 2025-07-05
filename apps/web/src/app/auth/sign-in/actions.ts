@@ -1,10 +1,12 @@
 'use server'
 
-import { signInWithPassword } from '@/http/sign-in-with-password'
 import { HTTPError } from 'ky'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+
+import { acceptInvite } from '@/http/accept-invite'
+import { signInWithPassword } from '@/http/sign-in-with-password'
 
 const signInSchema = z.object({
   email: z.string().email('Pleas, provide a valid e-mail address.'),
@@ -23,10 +25,22 @@ export async function signInWithEmailAndPassword(data: FormData) {
 
     const { token } = await signInWithPassword(result.data)
 
-    ;(await cookies()).set('token', token, {
+    const cookiesSession = await cookies()
+
+    cookiesSession.set('token', token, {
       path: '/',
       maxAge: 60 * 60 * 24 * 7,
     })
+
+    const inviteId = cookiesSession.get('inviteId')?.value
+
+    if (inviteId) {
+      try {
+        await acceptInvite(inviteId)
+
+        cookiesSession.delete('inviteId')
+      } catch { }
+    }
   } catch (err) {
     if (err instanceof HTTPError) {
       const { message } = await err.response.json()
