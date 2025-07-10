@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     try {
       await acceptInvite(inviteId)
       cookiesSession.delete('inviteId')
-    } catch { }
+    } catch {}
   }
 
   redirectUrl.pathname = '/'
