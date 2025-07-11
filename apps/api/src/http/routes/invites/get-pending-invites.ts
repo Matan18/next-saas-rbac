@@ -1,21 +1,23 @@
-import type { FastifyInstance } from "fastify";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { auth } from "../middlewares/auth";
-import z from "zod";
-import { prisma } from "@/lib/prisma";
-import { UnauthorizedError } from "../_errors/unauthorized-error";
-import { roleSchema } from "@saas/auth";
+import { roleSchema } from '@saas/auth'
+import type { FastifyInstance } from 'fastify'
+import { ZodTypeProvider } from 'fastify-type-provider-zod'
+import z from 'zod'
+
+import { prisma } from '@/lib/prisma'
+
+import { UnauthorizedError } from '../_errors/unauthorized-error'
+import { auth } from '../middlewares/auth'
 
 export function getPendingInvites(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .get(
-      "/penging-invites",
+      '/pending-invites',
       {
         schema: {
-          tags: ["invites"],
-          summary: "Get all user pending invites",
+          tags: ['invites'],
+          summary: 'Get all user pending invites',
           security: [{ bearerAuth: [] }],
           response: {
             200: z.object({
@@ -37,21 +39,21 @@ export function getPendingInvites(app: FastifyInstance) {
                       avatarUrl: z.string().nullable(),
                     })
                     .nullable(),
-                })
+                }),
               ),
             }),
           },
         },
       },
       async (request, reply) => {
-        const userId = await request.getCurrentUserId();
+        const userId = await request.getCurrentUserId()
 
         const user = await prisma.user.findUnique({
           where: { id: userId },
-        });
+        })
 
         if (!user) {
-          throw new UnauthorizedError("User not found");
+          throw new UnauthorizedError('User not found')
         }
 
         const invites = await prisma.invite.findMany({
@@ -75,11 +77,11 @@ export function getPendingInvites(app: FastifyInstance) {
             },
           },
           orderBy: {
-            createdAt: "desc",
+            createdAt: 'desc',
           },
-        });
+        })
 
-        return { invites };
-      }
-    );
+        return { invites }
+      },
+    )
 }
